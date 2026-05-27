@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Edit Student</title>
+
+<link
+href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+rel="stylesheet">
+
+</head>
+
+<body class="bg-light">
+
+<div class="container py-5">
+
+    <div class="card shadow p-5">
+
+        <h2 class="mb-4">
+            Edit Student
+        </h2>
+
+        <form method="POST">
+
+            <div class="row g-3">
+
+                <div class="col-md-6">
+
+                    <label>Name</label>
+
+                    <input
+                    type="text"
+                    name="name"
+                    value="{{ student.name }}"
+                    class="form-control"
+                    required>
+
+                </div>
+
+                <div class="col-md-6">
+
+                    <label>Maths</label>
+
+                    <input
+                    type="number"
+                    name="maths"
+                    value="{{ student.maths }}"
+                    class="form-control"
+                    required>
+
+                </div>
+
+                <div class="col-md-6">
+
+                    <label>Science</label>
+
+                    <input
+                    type="number"
+                    name="science"
+                    value="{{ student.science }}"
+                    class="form-control"
+                    required>
+
+                </div>
+
+                <div class="col-md-6">
+
+                    <label>English</label>
+
+                    <input
+                    type="number"
+                    name="english"
+                    value="{{ student.english }}"
+                    class="form-control"
+                    required>
+
+                </div>
+
+                <div class="col-md-6">
+
+                    <label>Attendance</label>
+
+                    <input
+                    type="number"
+                    name="attendance"
+                    value="{{ student.attendance }}"
+                    class="form-control"
+                    required>
+
+                </div>
+
+            </div>
+
+            <button
+            type="submit"
+            class="btn btn-primary mt-4">
+
+                Update Student
+
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+</body>
+</html>

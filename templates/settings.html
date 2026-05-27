@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+    <title>
+        Settings
+    </title>
+
+    <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    rel="stylesheet">
+
+    <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    rel="stylesheet">
+
+</head>
+
+<body class="bg-light">
+
+<div class="container mt-5">
+
+    <div class="d-flex justify-content-between align-items-center mb-5">
+
+        <h1>
+
+            ⚙ Settings Panel
+
+        </h1>
+
+        <a
+        href="/"
+        class="btn btn-dark">
+
+            Back to Dashboard
+
+        </a>
+
+    </div>
+
+    <div class="row g-4">
+
+        <!-- PROFILE -->
+
+        <div class="col-md-6">
+
+            <div class="card shadow border-0 p-4">
+
+                <h3 class="mb-4">
+
+                    👤 Admin Profile
+
+                </h3>
+
+                <p>
+
+                    <strong>Username:</strong>
+                    admin
+
+                </p>
+
+                <p>
+
+                    <strong>Role:</strong>
+                    Administrator
+
+                </p>
+
+                <p>
+
+                    <strong>Status:</strong>
+
+                    <span class="badge bg-success">
+
+                        Active
+
+                    </span>
+
+                </p>
+
+            </div>
+
+        </div>
+
+        <!-- SYSTEM STATUS -->
+
+        <div class="col-md-6">
+
+            <div class="card shadow border-0 p-4">
+
+                <h3 class="mb-4">
+
+                    🖥 System Status
+
+                </h3>
+
+                <p>
+
+                    Database:
+
+                    <span class="badge bg-success">
+
+                        Connected
+
+                    </span>
+
+                </p>
+
+                <p>
+
+                    Email Alerts:
+
+                    <span class="badge bg-success">
+
+                        Enabled
+
+                    </span>
+
+                </p>
+
+                <p>
+
+                    Server Status:
+
+                    <span class="badge bg-success">
+
+                        Running
+
+                    </span>
+
+                </p>
+
+            </div>
+
+        </div>
+
+        <!-- THEME SETTINGS -->
+
+        <div class="col-md-6">
+
+            <div class="card shadow border-0 p-4">
+
+                <h3 class="mb-4">
+
+                    🎨 Appearance
+
+                </h3>
+
+                <button
+                id="themeToggle"
+                class="btn btn-secondary">
+
+                    Toggle Dark Mode
+
+                </button>
+
+            </div>
+
+        </div>
+
+        <!-- PROJECT INFO -->
+
+        <div class="col-md-6">
+
+            <div class="card shadow border-0 p-4">
+
+                <h3 class="mb-4">
+
+                    🚀 Project Information
+
+                </h3>
+
+                <p>
+
+                    Project:
+                    Student Analytics Dashboard
+
+                </p>
+
+                <p>
+
+                    Version:
+                    2.0 Enterprise Edition
+
+                </p>
+
+                <p>
+
+                    Framework:
+                    Flask + SQLite
+
+                </p>
+
+            </div>
+
+        </div>
+
+        <!-- SECURITY -->
+
+        <div class="col-md-6">
+
+            <div class="card shadow border-0 p-4">
+
+                <h3 class="mb-4">
+
+                    🔐 Security
+
+                </h3>
+
+                <p>
+
+                    Authentication:
+                    Enabled
+
+                </p>
+
+                <p>
+
+                    Student Portal:
+                    Active
+
+                </p>
+
+                <p>
+
+                    Activity Logs:
+                    Enabled
+
+                </p>
+
+            </div>
+
+        </div>
+
+        <!-- LOGOUT -->
+
+        <div class="col-md-6">
+
+            <div class="card shadow border-0 p-4 text-center">
+
+                <h3 class="mb-4">
+
+                    🚪 Logout
+
+                </h3>
+
+                <a
+                href="/logout"
+                class="btn btn-danger w-100">
+
+                    Logout Admin
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+
+const themeToggle = document.getElementById(
+    "themeToggle"
+);
+
+themeToggle.addEventListener(
+
+    "click",
+
+    () => {
+
+        document.body.classList.toggle(
+            "bg-dark"
+        );
+
+        document.body.classList.toggle(
+            "text-white"
+        );
+    }
+);
+
+</script>
+</body>
+
+</html>

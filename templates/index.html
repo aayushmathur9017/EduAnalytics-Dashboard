@@ -1,0 +1,1108 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0">
+
+    <title>
+
+        Student Analytics Dashboard
+
+    </title>
+
+    <!-- Bootstrap -->
+
+    <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    rel="stylesheet">
+
+    <!-- Font Awesome -->
+
+    <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    rel="stylesheet">
+
+    <!-- Custom CSS -->
+
+    <link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+    <!-- TOAST -->
+
+    <div
+    class="position-fixed top-0 end-0 p-3"
+    style="z-index:9999">
+
+        <div
+        id="liveToast"
+        class="toast align-items-center text-bg-success border-0"
+        role="alert">
+
+            <div class="d-flex">
+
+                <div class="toast-body">
+
+                    {% with messages = get_flashed_messages() %}
+
+                    {% if messages %}
+
+                        {{ messages[0] }}
+
+                    {% else %}
+
+                        Action completed successfully 🚀
+
+                    {% endif %}
+
+                    {% endwith %}
+
+                </div>
+
+                <button
+                type="button"
+                class="btn-close btn-close-white me-2 m-auto"
+                data-bs-dismiss="toast">
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="d-flex">
+
+        <!-- SIDEBAR -->
+
+        <div class="sidebar p-3">
+
+            <h2 class="logo">
+
+                <i class="fa-solid fa-chart-line"></i>
+
+                EduAnalytics
+
+            </h2>
+
+            <!-- SIDEBAR MENU -->
+
+            <ul class="nav flex-column mt-5">
+
+                <li class="nav-item mb-3">
+
+                    <a
+                    class="nav-link active"
+                    href="/dashboard">
+
+                        <i class="fa-solid fa-house"></i>
+
+                        Dashboard
+
+                    </a>
+
+                </li>
+
+                <li class="nav-item mb-3">
+
+                    <a
+                    class="nav-link"
+                    href="/students">
+
+                        <i class="fa-solid fa-users"></i>
+
+                        Students
+
+                    </a>
+
+                </li>
+
+                <li class="nav-item mb-3">
+
+                    <a
+                    class="nav-link"
+                    href="/analytics">
+
+                        <i class="fa-solid fa-chart-pie"></i>
+
+                        Analytics
+
+                    </a>
+
+                </li>
+
+                <li class="nav-item mb-3">
+
+                    <a
+                    class="nav-link"
+                    href="/reports">
+
+                        <i class="fa-solid fa-file"></i>
+
+                        Reports
+
+                    </a>
+
+                </li>
+
+                <li class="nav-item mb-3">
+
+                    <a
+                    class="nav-link"
+                    href="/ai_insights">
+
+                        <i class="fa-solid fa-robot"></i>
+
+                        AI Insights
+                        
+
+                    </a>
+
+                </li>
+
+                <li class="nav-item mb-3">
+
+                    <a
+                    class="nav-link"
+                    href="/api_page ">
+
+                        <i class="fa-solid fa-code"></i>
+
+                        APIs
+
+                    </a>
+
+                </li>
+
+                <li class="nav-item mb-3">
+
+                    <a
+                    class="nav-link"
+                    href="/settings">
+
+                        <i class="fa-solid fa-gear"></i>
+
+                        Settings
+
+                    </a>
+
+                </li>
+
+            </ul>
+
+        </div>
+
+        <!-- MAIN CONTENT -->
+
+        <div class="main-content container-fluid">
+
+            <!-- TOPBAR -->
+
+            <div
+            id="dashboard"
+            class="topbar">
+
+                <div class="d-flex justify-content-between align-items-center flex-wrap">
+
+                    <h1 class="dashboard-title">
+
+                        Student Performance Dashboard
+
+                    </h1>
+
+                    <!-- REPORT BUTTONS -->
+
+                    <div
+                    id="reports"
+                    class="d-flex flex-wrap gap-2 mt-3 mt-md-0">
+
+                        <a
+                        href="/export"
+                        class="btn btn-success">
+
+                            Export Excel
+
+                        </a>
+
+                        <a
+                        href="/pdf_report"
+                        class="btn btn-primary">
+
+                            Download PDF
+
+                        </a>
+
+                        <button
+                        id="themeToggle"
+                        class="btn btn-secondary me-2">
+
+                            Dark Mode
+
+                        </button>
+
+                        <a
+                        href="/logout"
+                        class="btn btn-danger">
+
+                            Logout
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- CSV UPLOAD -->
+
+            <div class="chart-card mt-4">
+
+                <h3 class="mb-4">
+
+                    Upload CSV File
+
+                </h3>
+
+                <form
+                action="/upload_csv"
+                method="POST"
+                enctype="multipart/form-data">
+
+                    <div class="row g-3">
+
+                        <div class="col-md-10">
+
+                            <input
+                            type="file"
+                            name="file"
+                            class="form-control"
+                            required>
+
+                        </div>
+
+                        <div class="col-md-2">
+
+                            <button
+                            type="submit"
+                            class="btn btn-dark w-100">
+
+                                Upload
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+            <!-- ADD STUDENT -->
+
+            <div class="chart-card mt-4">
+
+                <h3 class="mb-4">
+
+                    Add Student
+
+                </h3>
+
+                <form
+                action="/add"
+                method="POST"
+                autocomplete="off">
+
+                    <div class="row g-3">
+
+                        <div class="col-md-3">
+
+                            <input
+                            type="text"
+                            name="name"
+                            class="form-control"
+                            placeholder="Student Name"
+                            required>
+
+                        </div>
+
+                        <div class="col-md-3">
+
+                            <input
+                            type="text"
+                            name="username"
+                            class="form-control"
+                            placeholder="Username"
+                            required>
+
+                        </div>
+
+                        <div class="col-md-3">
+
+                            <input
+                            type="password"
+                            name="password"
+                            class="form-control"
+                            placeholder="Password"
+                            required>
+
+                        </div>
+
+                        <div class="col-md-3">
+
+                            <input
+                            type="number"
+                            name="maths"
+                            class="form-control"
+                            placeholder="Maths"
+                            required>
+
+                        </div>
+
+                        <div class="col-md-3">
+
+                            <input
+                            type="number"
+                            name="science"
+                            class="form-control"
+                            placeholder="Science"
+                            required>
+
+                        </div>
+
+                        <div class="col-md-3">
+
+                            <input
+                            type="number"
+                            name="english"
+                            class="form-control"
+                            placeholder="English"
+                            required>
+
+                        </div>
+
+                        <div class="col-md-3">
+
+                            <input
+                            type="number"
+                            name="attendance"
+                            class="form-control"
+                            placeholder="Attendance"
+                            required>
+
+                        </div>
+
+                        <div class="col-md-3">
+
+                            <button
+                            type="submit"
+                            class="btn btn-success w-100">
+
+                                Add Student
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+            <!-- DASHBOARD CARDS -->
+
+            <div class="row g-4 mt-4">
+
+                <div class="col-md-3">
+
+                    <div class="dashboard-card bg-primary">
+
+                        <h5>
+                            Class Average
+                        </h5>
+
+                        <h2>
+                            {{ average }}
+                        </h2>
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-3">
+
+                    <div class="dashboard-card bg-success">
+
+                        <h5>
+                            Topper
+                        </h5>
+
+                        <h2>
+                            {{ topper }}
+                        </h2>
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-3">
+
+                    <div class="dashboard-card bg-warning">
+
+                        <h5>
+                            Total Students
+                        </h5>
+
+                        <h2>
+                            {{ total_students }}
+                        </h2>
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-3">
+
+                    <div class="dashboard-card bg-danger">
+
+                        <h5>
+                            Weak Students
+                        </h5>
+
+                        <h2>
+                            {{ weak_count }}
+                        </h2>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- MAIN CHART -->
+
+            <div class="chart-card mt-5">
+
+                <h3 class="mb-4">
+
+                    Student Performance Analysis
+
+                </h3>
+
+                <div class="chart-container">
+
+                    {{ chart | safe }}
+
+                </div>
+
+            </div>
+
+            <!-- ANALYTICS -->
+
+            <div
+            id="analytics"
+            class="chart-card mt-5">
+
+                <h3 class="mb-4">
+
+                    Analytics Insights
+
+                </h3>
+
+                <div class="row g-4">
+
+                    <div class="col-md-3">
+
+                        <div class="alert alert-success">
+
+                            <h5>
+                                Pass Percentage
+                            </h5>
+
+                            <h2>
+                                {{ pass_percentage }}%
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-3">
+
+                        <div class="alert alert-danger">
+
+                            <h5>
+                                Fail Percentage
+                            </h5>
+
+                            <h2>
+                                {{ fail_percentage }}%
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-3">
+
+                        <div class="alert alert-primary">
+
+                            <h5>
+                                Best Subject
+                            </h5>
+
+                            <h2>
+                                {{ best_subject }}
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-3">
+
+                        <div class="alert alert-warning">
+
+                            <h5>
+                                Low Attendance
+                            </h5>
+
+                            <h2>
+                                {{ weak_attendance }}
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- AI INSIGHTS -->
+
+            <div
+            id="ai"
+            class="chart-card mt-5">
+
+                <h3 class="mb-4">
+
+                    🤖 AI Insights
+
+                </h3>
+
+                <div class="row g-3">
+
+                    {% for insight in ai_insights %}
+
+                    <div class="col-md-6">
+
+                        <div class="alert alert-info shadow-sm">
+
+                            {{ insight }}
+
+                        </div>
+
+                    </div>
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+            <!-- API SECTION -->
+
+            <div
+            id="api"
+            class="chart-card mt-5">
+
+                <h3 class="mb-4">
+
+                    📡 API Endpoints
+
+                </h3>
+
+                <ul>
+
+                    <li>/api/students</li>
+
+                    <li>/api/topper</li>
+
+                    <li>/api/analytics</li>
+
+                </ul>
+
+            </div>
+
+            <!-- RECENT ACTIVITIES -->
+
+            <div class="chart-card mt-5">
+
+                <h3 class="mb-4">
+
+                    📜 Recent Activities
+
+                </h3>
+
+                <ul class="list-group">
+
+                    {% for activity in activities %}
+
+                    <li class="list-group-item">
+
+                        {{ activity.action }}
+
+                    </li>
+
+                    {% endfor %}
+
+                </ul>
+
+            </div>
+
+            <!-- STUDENT TABLE -->
+
+            <div
+            id="students"
+            class="chart-card mt-5">
+
+                <div class="d-flex justify-content-between align-items-center flex-wrap mb-4">
+
+                    <h3>
+
+                        Student Records
+
+                    </h3>
+
+                    <!-- FILTER BUTTONS -->
+
+                    <div class="d-flex flex-wrap gap-2 mt-3 mt-md-0">
+
+                        <button
+                        class="btn btn-primary"
+                        onclick="filterStudents('all')">
+
+                            All
+
+                        </button>
+
+                        <button
+                        class="btn btn-success"
+                        onclick="filterStudents('pass')">
+
+                            Pass
+
+                        </button>
+
+                        <button
+                        class="btn btn-danger"
+                        onclick="filterStudents('fail')">
+
+                            Fail
+
+                        </button>
+
+                        <button
+                        class="btn btn-warning"
+                        onclick="filterStudents('attendance')">
+
+                            Low Attendance
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+                <!-- SEARCH -->
+
+                <input
+                type="text"
+                id="searchInput"
+                class="form-control mb-4"
+                placeholder="Search Student">
+
+                <!-- TABLE -->
+
+                <div class="table-responsive">
+
+                    <table class="table table-hover">
+
+                        <thead class="table-dark">
+
+                            <tr>
+
+                                <th>Name</th>
+                                <th>Maths</th>
+                                <th>Science</th>
+                                <th>English</th>
+                                <th>Attendance</th>
+                                <th>Average</th>
+                                <th>Prediction</th>
+                                <th>AI Level</th>
+                                <th>Rank</th>
+                                <th>Status</th>
+                                <th>Action</th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="studentTable">
+
+                            {% for student in students %}
+
+                            <tr
+
+                            class="
+                            {% if student.Rank == 1 %}
+                            table-success
+                            {% elif student.Average < 50 %}
+                            table-danger
+                            {% elif student.Average < 70 %}
+                            table-warning
+                            {% endif %}
+                            "
+
+                            data-prediction="{{ student.Prediction }}"
+
+                            data-attendance="{{ student.Attendance }}"
+
+                            >
+
+                                <td>
+
+                                    {{ student.Name }}
+
+                                </td>
+
+                                <td>
+
+                                    {{ student.Maths }}
+
+                                </td>
+
+                                <td>
+
+                                    {{ student.Science }}
+
+                                </td>
+
+                                <td>
+
+                                    {{ student.English }}
+
+                                </td>
+
+                                <td>
+
+                                    {% if student.Attendance < 75 %}
+
+                                    <span class="badge bg-danger">
+
+                                        {{ student.Attendance }}%
+
+                                    </span>
+
+                                    {% else %}
+
+                                    <span class="badge bg-success">
+
+                                        {{ student.Attendance }}%
+
+                                    </span>
+
+                                    {% endif %}
+
+                                </td>
+
+                                <td>
+
+                                    {{ "%.2f"|format(student.Average) }}
+
+                                </td>
+
+                                <td>
+
+                                    {% if student.Prediction == 'Pass' %}
+
+                                    <span class="badge bg-success">
+
+                                        Pass
+
+                                    </span>
+
+                                    {% else %}
+
+                                    <span class="badge bg-danger">
+
+                                        Fail
+
+                                    </span>
+
+                                    {% endif %}
+
+                                </td>
+
+                                <!-- AI LEVEL -->
+
+                                <td>
+
+                                    {% if student.AI_Level == 'Excellent' %}
+
+                                    <span class="badge bg-success">
+
+                                        Excellent
+
+                                    </span>
+
+                                    {% elif student.AI_Level == 'Good' %}
+
+                                    <span class="badge bg-primary">
+
+                                        Good
+
+                                    </span>
+
+                                    {% elif student.AI_Level == 'Average' %}
+
+                                    <span class="badge bg-warning text-dark">
+
+                                        Average
+
+                                    </span>
+
+                                    {% else %}
+
+                                    <span class="badge bg-danger">
+
+                                        Weak
+
+                                    </span>
+
+                                    {% endif %}
+
+                                </td>
+
+                                <!-- RANK -->
+
+                                <td>
+
+                                    <span class="badge bg-info">
+
+                                        #{{ student.Rank }}
+
+                                    </span>
+
+                                </td>
+
+                                <!-- STATUS -->
+
+                                <td>
+
+                                    {% if student.Rank == 1 %}
+
+                                    <span class="badge bg-success">
+
+                                        Topper
+
+                                    </span>
+
+                                    {% elif student.Average < 50 %}
+
+                                    <span class="badge bg-danger">
+
+                                        Weak
+
+                                    </span>
+
+                                    {% else %}
+
+                                    <span class="badge bg-warning text-dark">
+
+                                        Good
+
+                                    </span>
+
+                                    {% endif %}
+
+                                </td>
+
+                                <!-- ACTION -->
+
+                                <td>
+
+                                    <a
+                                    href="/edit/{{ student.id }}"
+                                    class="btn btn-warning btn-sm">
+
+                                        Edit
+
+                                    </a>
+
+                                    <a
+                                    href="/delete/{{ student.id }}"
+                                    class="btn btn-danger btn-sm">
+
+                                        Delete
+
+                                    </a>
+
+                                </td>
+
+                            </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+            <!-- SETTINGS -->
+
+            <div
+            id="settings"
+            class="chart-card mt-5">
+
+                <h3 class="mb-4">
+
+                    ⚙ Settings
+
+                </h3>
+
+                <p>
+
+                    Dark Mode, Export Settings and Dashboard Controls available here.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- JS -->
+
+    <script
+    src="{{ url_for('static', filename='script.js') }}">
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+
+const themeToggle =
+document.getElementById("themeToggle");
+
+let dark = false;
+
+themeToggle.addEventListener("click", function () {
+
+    dark = !dark;
+
+    if (dark) {
+
+        document.body.style.background =
+        "#0f172a";
+
+        document.body.style.color =
+        "white";
+
+        document.querySelector(".main-content")
+        .style.background =
+        "#0f172a";
+
+        document.querySelectorAll(".chart-card")
+        .forEach(card => {
+
+            card.style.background =
+            "#1e293b";
+            card.querySelectorAll(
+    ".alert"
+).forEach(alert => {
+
+    alert.style.color =
+    "black";
+
+});
+
+           card.style.color =
+           "#f8fafc";
+        });
+
+        document.querySelector(".sidebar")
+        .style.background =
+        "linear-gradient(180deg,#020617,#111827)";
+
+        themeToggle.innerText =
+        "Light Mode";
+
+    }
+
+    else {
+
+        document.body.style.background =
+        "linear-gradient(135deg,#e0e7ff,#f8fafc,#dbeafe)";
+
+        document.body.style.color =
+        "black";
+
+        document.querySelector(".main-content")
+        .style.background =
+        "transparent";
+
+        document.querySelectorAll(".chart-card")
+        .forEach(card => {
+
+    card.style.background =
+    "#1e293b";
+
+    card.style.color =
+    "white";
+
+});
+
+
+document.querySelectorAll(".alert")
+.forEach(alert => {
+
+    alert.style.color =
+    "black";
+
+});
+
+        document.querySelector(".sidebar")
+        .style.background =
+        "linear-gradient(180deg,#111827,#1e293b)";
+
+        themeToggle.innerText =
+        "Dark Mode";
+
+    }
+
+});
+
+</script>   
+
+</body>
+
+</html>

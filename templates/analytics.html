@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+    <title>
+        Analytics
+    </title>
+
+    <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    rel="stylesheet">
+
+</head>
+
+<body>
+
+<div class="container mt-5">
+
+    <h1 class="mb-5">
+
+        Analytics Dashboard
+
+    </h1>
+
+    <div class="row g-4">
+
+        <div class="col-md-3">
+
+            <div class="alert alert-success">
+
+                <h5>
+                    Pass Percentage
+                </h5>
+
+                <h2>
+                    {{ pass_percentage }}%
+                </h2>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-3">
+
+            <div class="alert alert-danger">
+
+                <h5>
+                    Fail Percentage
+                </h5>
+
+                <h2>
+                    {{ fail_percentage }}%
+                </h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="mt-5">
+
+        {{ pie_chart | safe }}
+
+    </div>
+
+</div>
+<script>
+
+const themeToggle =
+document.getElementById("themeToggle");
+
+function enableDarkMode() {
+
+    document.body.classList.add("dark-mode");
+
+    localStorage.setItem(
+        "theme",
+        "dark"
+    );
+
+    themeToggle.innerText =
+    "Light Mode";
+}
+
+function disableDarkMode() {
+
+    document.body.classList.remove("dark-mode");
+
+    localStorage.setItem(
+        "theme",
+        "light"
+    );
+
+    themeToggle.innerText =
+    "Dark Mode";
+}
+
+if (
+    localStorage.getItem("theme")
+    === "dark"
+) {
+
+    enableDarkMode();
+}
+
+themeToggle.addEventListener(
+    "click",
+    () => {
+
+        if (
+            document.body.classList.contains(
+                "dark-mode"
+            )
+        ) {
+
+            disableDarkMode();
+
+        }
+
+        else {
+
+            enableDarkMode();
+
+        }
+
+    }
+);
+
+</script>
+</body>
+
+</html>
