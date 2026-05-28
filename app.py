@@ -1,3 +1,6 @@
+from flask import jsonify, request
+from email.mime import message
+from google import genai
 from flask_jwt_extended import (
 
     JWTManager,
@@ -48,6 +51,13 @@ import pandas as pd
 import plotly.express as px
 
 app = Flask(__name__)
+client = genai.Client(
+
+    api_key="AIzaSyA5Ey03GfHT5RkT5QLdACOu0G_nhl1Y02k"
+
+)
+
+
 app.config['JWT_SECRET_KEY'] = 'eduanalytics_secret_key'
 
 jwt = JWTManager(app)
@@ -1265,6 +1275,53 @@ def protected():
         f'Welcome {current_user}',
 
         'status': 'Authorized'
+
+    })
+@app.route('/chatbot', methods=['POST'])
+
+def chatbot():
+
+    data = request.get_json()
+
+    message = data.get(
+        'message',
+        ''
+    ).lower()
+
+    if "topper" in message:
+
+        reply = (
+            "🏆 Topper is Aayush."
+        )
+
+    elif "attendance" in message:
+
+        reply = (
+            "📉 Low attendance students detected."
+        )
+
+    elif "ai" in message:
+
+        reply = (
+            "🤖 AI means Artificial Intelligence."
+        )
+
+    elif "python" in message:
+
+        reply = (
+            "🐍 Python is a programming language."
+        )
+
+    else:
+
+        reply = (
+            "🤖 Ask me about topper, AI, "
+            "attendance or Python."
+        )
+
+    return jsonify({
+
+        'reply': reply
 
     })
 if __name__ == '__main__':
