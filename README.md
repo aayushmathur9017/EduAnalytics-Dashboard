@@ -1,6 +1,6 @@
 # EduAnalytics Dashboard
 
-AI Powered Student Performance Analytics Dashboard built using Flask, SQLAlchemy, Plotly, JWT Authentication, and Docker.
+Student Performance Analytics Dashboard built using Flask, SQLAlchemy, Plotly, JWT Authentication, and Docker.
 
 ## Features
 
